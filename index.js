@@ -9,7 +9,7 @@ import db from './config/db.js'
 //rutas
 import loginRouter from './routes/login.js';
 import signRouter from './routes/signin.js';
-
+import profileRouter from './routes/profile.js'
 
 dotenv.config()
 const PORT = process.env.PORT || 3000
@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 3000
 
 const expressApp = express()
 
-//cmiddleWare
+//middleWare
 expressApp.use(express.json())
 expressApp.use(bodyParser.json())
 
@@ -39,7 +39,8 @@ expressApp.get('/todos', async(req,res)=>{
 expressApp.use('/',loginRouter)
 //registro
 expressApp.use('/',signRouter)
-//ver usuarios
+//ver datos de usuario verificado
+expressApp.use('/', profileRouter)
 
 //crear mazo
 //ver mazos

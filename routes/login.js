@@ -1,9 +1,9 @@
 import { Router } from "express";
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv'
+import jwt from 'jsonwebtoken'
+
 import User from "../models/User.js";
-
-
 dotenv.config()
 const SECRET_KEY = process.env.SECRET_KEY 
 
@@ -27,9 +27,8 @@ loginRouter.post('/login', async (req,res)=>{
             if(passwordMatch){
                 const token = jwt.sign({userId: user._id},SECRET_KEY )
 
-                //res.header('authorization',token)
 
-                res.json({message:'login success'})
+                res.header('authorization',token).json({message:'login success'})
             }else{
                 res.status(401).json({ message : 'credenciales inválidas'})
             }
