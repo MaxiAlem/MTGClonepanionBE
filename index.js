@@ -9,7 +9,8 @@ import db from './config/db.js'
 //rutas
 import loginRouter from './routes/login.js';
 import signRouter from './routes/signin.js';
-import profileRouter from './routes/profile.js'
+import profileRouter from './routes/profile.js';
+import updateProfileRouter from './routes/updateProfile.js'
 
 dotenv.config()
 const PORT = process.env.PORT || 3000
@@ -41,6 +42,8 @@ expressApp.use('/',loginRouter)
 expressApp.use('/',signRouter)
 //ver datos de usuario verificado
 expressApp.use('/', profileRouter)
+//update
+expressApp.use('/', updateProfileRouter)
 
 //crear mazo
 //ver mazos
