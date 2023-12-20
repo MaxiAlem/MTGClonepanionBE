@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Deck from './Deck.js';
 
 const userSchema = mongoose.Schema({
     name:{
@@ -16,10 +17,12 @@ const userSchema = mongoose.Schema({
         required:true
     },
     img:{
-        type:String
+        type:String,
+        default: 'default.jpg'
     },
     decks:[
-        {type:String}
+        { type: mongoose.Schema.Types.ObjectId,
+         ref: 'Deck' }
     ],
     pvp:[{
         win:{

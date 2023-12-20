@@ -10,7 +10,10 @@ import db from './config/db.js'
 import loginRouter from './routes/login.js';
 import signRouter from './routes/signin.js';
 import profileRouter from './routes/profile.js';
-import updateProfileRouter from './routes/updateProfile.js'
+//import updateProfileRouter from './routes/updateProfile.js'
+
+//import newDeckRouter from './routes/newdeck.js'
+import deckRouter from './routes/decks.js'
 
 dotenv.config()
 const PORT = process.env.PORT || 3000
@@ -40,13 +43,12 @@ expressApp.get('/todos', async(req,res)=>{
 expressApp.use('/',loginRouter)
 //registro
 expressApp.use('/',signRouter)
-//ver datos de usuario verificado
+//ver datos de usuario verificado y update
 expressApp.use('/', profileRouter)
-//update
-expressApp.use('/', updateProfileRouter)
 
-//crear mazo
-//ver mazos
+expressApp.use('/', deckRouter)
+
+//expressApp.use('/', newDeckRouter)
 
 
 

@@ -7,12 +7,37 @@ const deckSchema = mongoose.Schema({
         required:true
     },
     owner:{
-        type:String
+        type:String,
+        required: true
     },
-    img,
+     img:{
+        type:String,
+        default: 'default.jpg'
+    },
     color:[{
         type:String
     }],
-    win,lose,playedgames
+    shared:{
+        type:Boolean,
+        default:false,
+        required: true
+    },
+    win:{
+        type:Number,
+        default: 0
+    },
+    lose:{
+        type:Number,
+        default: 0
+    },
+    playedgames:{
+        type:Number,
+        default: 0
+    }
 
 })
+
+const Deck = mongoose.model('Deck', deckSchema)
+
+
+export default Deck
