@@ -38,11 +38,15 @@ deckRouter.post('/profile/decks',async (req,res)=>{
          // Obtener el ID del usuario autenticado desde req.userId
     const user = await User.findById(req.userId);
     
-    const newDeck = new Deck({name, color, owner: user})//creamos el mazo 
+    const newDeck = new Deck({name, color, owner: user._id})//creamos el mazo 
 
     await newDeck.save()//y lo saveamos
     ////////hay que guardar el id del deck en el usuario!!
+    user.decks.push(newDeck._id)
 
+    await user.save()
+
+    res.status(201).json(newDeck)
     if (!user) {
         return res.status(404).json({ message: 'Usuario no encontrado' });
       }
@@ -51,13 +55,17 @@ deckRouter.post('/profile/decks',async (req,res)=>{
         console.error('Error al crear el mazo:', error);
     res.status(500).json({ error: 'Error al crear el mazo' });
     }
-   
-    
 
-    res.status(201).json(newUser)
     });
 
+deckRouter.delete('/profile/decks', async (req,res)=>{
+    const deck = await Deck.findById(req.body.deckId);
 
+    if(!deck){
+       return res.status(404).json({message:'Deck not found'})
+    }
+    res.send(req.body.deckId)
+})
    
 export default deckRouter
 ///meter nombre del mazo y pushear en decks
