@@ -12,7 +12,10 @@ profileRouter.use(tokenVerif);
 profileRouter.get('/profile', async (req, res)=>{
     try {
          // Obtener el ID del usuario autenticado desde req.userId
-    const user = await User.findById(req.userId);
+    const user = await User.findById(req.userId)
+                          .populate({
+                            path:'decks',
+                            select : 'name color'})
 
     if (!user) {
         return res.status(404).json({ message: 'Usuario no encontrado' });

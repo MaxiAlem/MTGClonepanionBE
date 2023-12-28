@@ -6,7 +6,7 @@ import Deck from '../models/Deck.js'
 
 const deckRouter = Router();
 
-//aplicamos el middlew
+//aplicamos el middlew para manipular la bd del user
 deckRouter.use(tokenVerif)
 
 deckRouter.get('/profile/decks',async (req,res)=>{
@@ -57,15 +57,56 @@ deckRouter.post('/profile/decks',async (req,res)=>{
     }
 
     });
+deckRouter.put('/profile/decks', async (req, res)=>{
+    const deck = await Deck.findById(req.body.deckId);
 
+    const {name,color} = req.body
+
+    try {
+        //buscar el usuario en la bd ppor la id
+  
+        if(!deck){
+            return res.status(404)
+                      .json({message: 'dont found deck'})
+        }
+  
+        //UPDATE DATA
+        deck.name = req.body.name || deck.name
+        deck.color = req.body.color || deck.color
+
+        //save
+        await deck.save();
+  
+        res.json({message:'Update Success!!'})
+    } catch (error) {
+        console.error('Error to update', error)
+        res.status(500).json({error:"Error to update"})
+        
+    }
+})
 deckRouter.delete('/profile/decks', async (req,res)=>{
     const deck = await Deck.findById(req.body.deckId);
+    const user = await User.findById(req.userId);
 
     if(!deck){
        return res.status(404).json({message:'Deck not found'})
     }
-    res.send(req.body.deckId)
+    if(!user.decks.includes(deck._id)){
+        return res.status(404).json({message:'Deck not found in User'})
+    }
+
+    //borramos elemento de la bd
+    await Deck.findByIdAndDelete(deck);//findByIdAndRemove no existe?
+
+    // Elimina el ID del mazo del array de decks del usuario
+    user.decks.pull(deck._id);
+
+    // Guarda el usuario actualizado en la base de datos
+    await user.save();
+    res.send({message: "deck deleted successfully"})
 })
    
 export default deckRouter
+
+
 ///meter nombre del mazo y pushear en decks
