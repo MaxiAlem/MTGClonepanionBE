@@ -24,6 +24,10 @@ const userSchema = mongoose.Schema({
         { type: mongoose.Schema.Types.ObjectId,
          ref: 'Deck' }
     ],
+    communities:[
+        { type: mongoose.Schema.Types.ObjectId,
+         ref: 'Community' }
+    ],
     pvp:[{
         win:{
             type:Number

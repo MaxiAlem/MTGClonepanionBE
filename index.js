@@ -10,6 +10,7 @@ import db from './config/db.js'
 import loginRouter from './routes/login.js';
 import signRouter from './routes/signin.js';
 import profileRouter from './routes/profile.js';
+import communityRouter from './routes/community.js';
 //import updateProfileRouter from './routes/updateProfile.js'
 
 //import newDeckRouter from './routes/newdeck.js'
@@ -48,7 +49,7 @@ expressApp.use('/', profileRouter)
 
 expressApp.use('/', deckRouter)
 
-//expressApp.use('/', newDeckRouter)
+expressApp.use('/', communityRouter)
 
 
 
