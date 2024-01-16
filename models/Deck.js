@@ -17,19 +17,22 @@ const deckSchema = mongoose.Schema({
     color:[{
         type:String
     }],
-    shared:{
-        type:Boolean,
-        default:false,
-        required: true
-    },
-    win:{
-        type:Number,
-        default: 0
-    },
-    lose:{
-        type:Number,
-        default: 0
-    },
+    pvp:[{
+        win:{
+            type:Number
+        },
+        lose:{
+            type:Number
+        }
+    }],
+    multiplayer:[{
+        win:{
+            type:Number
+        },
+        lose:{
+            type:Number
+        }
+    }],
     playedgames:{
         type:Number,
         default: 0

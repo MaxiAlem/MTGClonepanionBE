@@ -28,15 +28,15 @@ communityRouter.get('/profile/communities', async(req,res)=>{
     }
 })
 
-communityRouter.post('/profile/communities', async(req,res)=>{
+communityRouter.post('/profile', async(req,res)=>{
 
-    const {name} = req.body;
+    const {nameComm} = req.body;
 
     try {
         
         const user = await User.findById(req.userId);
 
-        const newComm = new Comunnity({name, owner: user._id})//cramos la comm
+        const newComm = new Comunnity({name:nameComm, admins: [req.userId]})//cramos la comm
 
         await newComm.save()//saveamos en la DB
         user.communities.push(newComm._id) //y en el arr del user

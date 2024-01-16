@@ -26,9 +26,7 @@ deckRouter.get('/profile/decks',async (req,res)=>{
        console.error('Error al obtener el perfil:', error);
    res.status(500).json({ error: 'Error al obtener el perfil' });
    }
-   }
-   
-   );
+   });
 
 deckRouter.post('/profile/decks',async (req,res)=>{
 
@@ -52,8 +50,8 @@ deckRouter.post('/profile/decks',async (req,res)=>{
       }
 
     } catch (error) {
-        console.error('Error al crear el mazo:', error);
-    res.status(500).json({ error: 'Error al crear el mazo' });
+        console.error('Error creating deck:', error);
+    res.status(500).json({ error: 'Error creating deck' });
     }
 
     });

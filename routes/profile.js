@@ -13,12 +13,12 @@ profileRouter.get('/profile', async (req, res)=>{
     try {
          // Obtener el ID del usuario autenticado desde req.userId
     const user = await User.findById(req.userId)
-                          .populate({
-                            path:'decks',
-                            select : 'name color'})
+    // //                       .populate({
+    // //                         path:'decks',
+    // //                         select : 'name color'})
 
     if (!user) {
-        return res.status(404).json({ message: 'Usuario no encontrado' });
+        return res.status(404).json({ message: 'USER not Found' });
       }
   
       // Devolver los datos del perfil
@@ -26,15 +26,14 @@ profileRouter.get('/profile', async (req, res)=>{
         name: user.name,
         email: user.email,
         img: user.img,
-        decks:user.decks,
-        pvp: user.pvp,
-        multiplayer: user.multiplayer
+        communities:user.communities,
+      
 
-        // Agrega otros campos del perfil que desees devolver
+        // Agrega otros campos del perfil si los hay
       });
     } catch (error) {
         console.error('Error al obtener el perfil:', error);
-    res.status(500).json({ error: 'Error al obtener el perfil' });
+    res.status(500).json({ error: 'Error to get Profile' });
     }
 });
 
@@ -44,7 +43,7 @@ profileRouter.put('/profile', async (req,res)=>{
   
 
   try {
-      //buscar el usuario en la bd ppor la id
+      //buscar el usuario en la bd por la id
       const user = await User.findById(userId)
 
       if(!user){
@@ -56,9 +55,6 @@ profileRouter.put('/profile', async (req,res)=>{
       user.name = req.body.name || user.name
       user.email = req.body.email || user.email
       user.img =req.body.img|| user.img
-      
-     
-
 
       //save
       await user.save();

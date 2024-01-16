@@ -8,22 +8,17 @@ const communitySchema = mongoose.Schema({
     },
     members:[{
          type: mongoose.Schema.Types.ObjectId,
-            ref: 'User',
-            admin:{
-                type:Boolean,
-                default:false,
-                required:true
-            }}
-    ],
-    sharedDecks:{
-        type:Boolean,
-        default:false
-    },
+            ref: 'Player'
+        }],
+    decks: [{
+         type: mongoose.Schema.Types.ObjectId,
+            ref: 'Deck' 
+    }],
     img:{
         type:String,
         default:'default.jpg'
     },
-    owner:[{
+    admins:[{
         type: mongoose.Schema.Types.ObjectId,
            ref: 'User',}
    ],
