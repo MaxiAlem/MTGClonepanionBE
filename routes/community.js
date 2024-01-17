@@ -3,7 +3,7 @@ import tokenVerif from '../middleware/tokenVerif.js';
 
 
 import User from '../models/User.js';
-import Comunnity from '../models/Comunnity.js'
+import Community from '../models/Community.js'
 
 const communityRouter = Router()
 
@@ -11,23 +11,31 @@ const communityRouter = Router()
 communityRouter.use(tokenVerif)
 
 
-communityRouter.get('/profile/communities', async(req,res)=>{
+communityRouter.get('/community/:commId', async(req,res)=>{
     try {
         const user = await User.findById(req.userId)
+        const community = await Community.findById(req.params.commId)
 
         if(!user){
             return res.status(404).json({ message : 'User not found'})
         };
-        res.json({
-            communities : user.communities
+        if(!community.admins.includes(user._id)){    
+           return res.json({
+                message : `bienvenido a la comunidad ${community.name}, solicite una invitacion para ser admin`
             })
+        } 
+        res.json({
+                message : `bienvenido a la comunidad ${community.name},${user.name}`,
+                
+            })
+        
         
     } catch (error) {
         console.error('Error al obtener el perfil:', error);
    res.status(500).json({ error: 'Error al obtener el perfil' });
     }
 })
-
+//add new comm
 communityRouter.post('/profile', async(req,res)=>{
 
     const {nameComm} = req.body;
@@ -36,16 +44,20 @@ communityRouter.post('/profile', async(req,res)=>{
         
         const user = await User.findById(req.userId);
 
-        const newComm = new Comunnity({name:nameComm, admins: [req.userId]})//cramos la comm
+        if (!user) {
+                    return res.status(404).json({ message: 'Usuario no encontrado' });
+                }
+
+
+        const newComm = new Community({name:nameComm, admins: [req.userId]})//cramos la comm
 
         await newComm.save()//saveamos en la DB
         user.communities.push(newComm._id) //y en el arr del user
+        await user.save()
 
         res.status(201).json(newComm)
 
-        if (!user) {
-            return res.status(404).json({ message: 'Usuario no encontrado' });
-          }
+      
     } catch (error) {
         console.error('Error creating community:', error);
         res.status(500).json({ error: 'Error creating community' });
@@ -53,8 +65,46 @@ communityRouter.post('/profile', async(req,res)=>{
 
 })
 
-communityRouter.put('/profile/communities', async(req,res)=>{})
+communityRouter.put('/community/:commId', async(req,res)=>{
+    //editar nombre, foto
 
-communityRouter.delete('/profile/communities', async(req,res)=>{})
+  
+  try {
+      //buscar el usuario en la bd por la id
+      const user = await User.findById(req.userId)
+      const community = await Community.findById(req.params.commId)
+
+      if(!user){
+          return res.status(404)
+                    .json({message: 'dont found User'})
+      }
+      if(!community.admins.includes(user._id)){    
+        return res.json({
+             message : `bienvenido a la comunidad ${community.name}, solicite una invitacion para ser admin`
+         })
+     } 
+
+      //UPDATE DATA
+      community.name = req.body.name || community.name
+      
+      community.img =req.body.img|| community.img
+
+      //save
+      await community.save();
+
+      res.json({message:'Update Success!!'})
+  } catch (error) {
+      console.error('Error to update', error)
+      res.status(500).json({error:"Error to update"})
+      
+  }
+})
+
+communityRouter.delete('/community/:commId', async(req,res)=>{
+
+    //borrar comunidad
+    //si una comm no tiene admins, se borra
+    
+})
 
 export default communityRouter

@@ -23,6 +23,7 @@ profileRouter.get('/profile', async (req, res)=>{
   
       // Devolver los datos del perfil
       res.json({
+        id: user._id,
         name: user.name,
         email: user.email,
         img: user.img,
@@ -65,5 +66,25 @@ profileRouter.put('/profile', async (req,res)=>{
       res.status(500).json({error:"Error to update"})
       
   }
+})
+
+profileRouter.delete('/profile', async(req,res)=>{
+  const userId = req.userId;
+
+  try {
+    //buscar el usuario en la bd por la id
+    const user = await User.findByIdAndDelete(userId)
+
+    if(!user){
+        return res.status(404)
+                  .json({message: 'dont found User'})
+    }
+
+    res.json({message:'delete Success!!'})
+} catch (error) {
+    console.error('Error to delete', error)
+    res.status(500).json({error:"Error to delete"})
+    
+}
 })
 export default profileRouter
