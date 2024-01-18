@@ -104,7 +104,29 @@ communityRouter.delete('/community/:commId', async(req,res)=>{
 
     //borrar comunidad
     //si una comm no tiene admins, se borra
+    const userId = req.userId;
+   
+
+  try {
+    //buscar el usuario en la bd por la id
+    const user = await User.findByIdAndDelete(userId)
+    const community = await Community.findByIdAndDelete(req.params.commId)
+    if(!user){
+        return res.status(404)
+                  .json({message: 'dont found User'})
+    }
+    if(!community.admins.includes(user._id)){    
+        return res.json({
+             message : `bienvenido a la comunidad ${community.name}, solicite una invitacion para ser admin`
+         })
+     } 
+
+    res.json({message:'delete Success!!'})
+} catch (error) {
+    console.error('Error to delete', error)
+    res.status(500).json({error:"Error to delete"})
     
+}
 })
 
 export default communityRouter

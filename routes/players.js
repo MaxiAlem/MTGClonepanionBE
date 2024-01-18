@@ -17,7 +17,18 @@ playerRouter.get('/community/:commId/players', (req,res)=>{
 
 })
 
+playerRouter.post('/community/:commId/players', (req,res)=>{
 
+
+})
+playerRouter.put('/community/:commId/players', (req,res)=>{
+
+
+})
+playerRouter.delete('/community/:commId/players', (req,res)=>{
+
+
+})
 
 
 
